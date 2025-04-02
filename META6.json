@@ -1,0 +1,17 @@
+{
+  "auth": "zef:jforget",
+  "build-depends": [
+  ],
+  "depends": [
+  ],
+  "description": "A brand new and very nice module",
+  "name": "Date--Calendar--Armenian",
+  "provides": {
+    "Date::Calendar::Armenian": "lib/Date/Calendar/Armenian.rakumod"
+  },
+  "resources": [
+  ],
+  "test-depends": [
+  ],
+  "version": "0.0.1"
+}
