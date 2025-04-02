@@ -1,0 +1,10 @@
+/blib/
+/doc/
+/src/*.o
+/src/Makefile
+/.panda-work
+/resources/*.so
+/resources/*.dylib
+.precomp/
+/Date-Calendar-Armenian-*
+*~

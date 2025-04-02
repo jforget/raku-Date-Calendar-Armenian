@@ -1,17 +1,32 @@
 {
-  "auth": "zef:jforget",
-  "build-depends": [
+  "api"     : "1",
+  "auth"    : "zef:jforget",
+  "authors" : [
+    "Jean Forget"
   ],
-  "depends": [
+  "build-depends": [ ],
+  "depends"      : [
+      "Date::Calendar::Strftime"
   ],
-  "description": "A brand new and very nice module",
-  "name": "Date--Calendar--Armenian",
-  "provides": {
-    "Date::Calendar::Armenian": "lib/Date/Calendar/Armenian.rakumod"
+  "description" : "Conversions from / to the Armenian calendar",
+  "license"     : "Artistic-2.0",
+  "name"        : "Date::Calendar::Armenian",
+  "perl"        : "6.d",
+  "provides"    : {
+      "Date::Calendar::Armenian"       : "lib/Date/Calendar/Armenian.rakumod"
+    , "Date::Calendar::Armenian::Names": "lib/Date/Calendar/Armenian/Names.rakumod"
   },
-  "resources": [
+  "resources"   : [ ],
+  "source-url"  : "https://github.com/jforget/raku-Date-Calendar-Armenian.git",
+  "support"     : {
+      "email" : "J2N-FORGET@orange.fr"
+  },
+  "tags"        : [
+      "date"
+    , "calendar"
   ],
   "test-depends": [
+      "Test::META"
   ],
-  "version": "0.0.1"
+  "version": "0.1.0"
 }
