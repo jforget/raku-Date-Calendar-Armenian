@@ -1,4 +1,51 @@
-unit module Date::Calendar::Armenian;
+use v6.d;
+use Date::Calendar::Strftime;
+use Date::Calendar::Armenian::Names;
+
+unit class Date::Calendar::Armenian:ver<0.1.0>:auth<zef:jforget>:api<1>
+      does Date::Calendar::Strftime;
+
+has Int $.daycount;
+has Int $.daypart where { before-sunrise() ≤ $_ ≤ after-sunset() };
+has Int $.year  where { $_ ≥ 1 };
+has Int $.month where { 1 ≤ $_ ≤ 13 };
+has Int $.day   where { 1 ≤ $_ ≤ 30 };
+has Int $.day-of-year;
+has Int $.day-of-week;
+has Int $.week-number;
+has Int $.week-year;
+
+method BUILD(Int:D :$year, Int:D :$month, Int:D :$day, Int :$daypart = daylight()) {
+  $._chek-build-args($year, $month, $day);
+  $._build-from-args($year, $month, $day, $daypart);
+}
+
+method _chek-build-args(Int $year, Int $month, Int $day) {
+  if $month == 13 & $day > 5 {
+    X::OutOfRange.new(:what<Day>, :got($day), :range<1..5 for additional days (aveliats)>).throw;
+  }
+}
+
+method _build-from-args(Int $year, Int $month, Int $day, Int $daypart) {
+  $!year    = $year;
+  $!month   = $month;
+  $!day     = $day;
+  $!daypart = $daypart;
+
+  # computing derived attributes
+  my $doy      =  30 × ($month - 1) + $day;
+  my $daycount = 365 × $year + $doy - 477499;
+  my $dow      = ($daycount + 3) % 7 + 1;
+  if $daypart == before-sunrise() {
+    # after computing $dow, not before!
+    ++$daycount;
+  }
+
+  # storing derived attributes
+  $!day-of-year = $doy;
+  $!day-of-week = $dow;
+  $!daycount    = $daycount;
+}
 
 =begin pod
 

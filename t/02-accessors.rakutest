@@ -1,0 +1,35 @@
+#
+# Checking the getters
+#
+use v6.d;
+use Test;
+use Date::Calendar::Armenian;
+use Date::Calendar::Strftime;
+
+plan 14;
+
+my Date::Calendar::Armenian $d .= new(year => 1474, month => 9, day => 17);
+
+# 1..6
+is($d.month,         9);
+is($d.day,          17);
+is($d.year,       1474);
+is($d.daycount,  60768);
+is($d.day-of-year, 257);
+is($d.day-of-week,   5);
+
+# 7..14
+$d .= new(year => 1474, month => 4, day => 26, daypart => daylight);
+is($d.daycount,  60627);
+is($d.day-of-week,   4);
+$d .= new(year => 1474, month => 4, day => 26, daypart => after-sunset);
+is($d.daycount, 60627);
+is($d.day-of-week,   4);
+$d .= new(year => 1474, month => 4, day => 26, daypart => before-sunrise);
+is($d.daycount, 60628);
+is($d.day-of-week,   4);
+$d .= new(year => 1474, month => 4, day => 27, daypart => daylight);
+is($d.daycount, 60628);
+is($d.day-of-week,   5);
+
+done-testing;
