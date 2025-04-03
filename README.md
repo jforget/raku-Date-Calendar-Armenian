@@ -19,7 +19,7 @@ $d-arm .= new-from-date($d-grg);
 say $d-arm;
 # --> 1474-04-26
 say "{.day-name} {.day} {.month-name} {.year}" with $d-arm;
-# --> xxx 26 trē 1474
+# --> čʿorekʿšabatʿi 26 trē 1474
 
 ```
 
@@ -50,21 +50,21 @@ my  Date                     $d-grg;
 $d-arm .= new(year    => 1474
             , month   =>    9
             , day     =>   16
-            , daypart => after-sunset());
+            , daypart => before-sunrise());
 $d-grg = $d-arm.to-date;
 
 say $d-grg;
-# ---> 2025-04-01 instead of 2025-04-02
+# ---> 2025-04-03 instead of 2025-04-02
 
 # on the other hand:
-$d-arm .= new(year => 1474, month => 9, day => 16, daypart => before-sunrise());
+$d-arm .= new(year => 1474, month => 9, day => 16, daypart => after-sunset());
 $d-grg  = $d-arm.to-date;
-say $hannukah-grg;
+say $d-grg;
 # --> '2025-04-02'
 
 $d-arm .= new(year => 1474, month => 9, day => 16, daypart => daylight());
 $d-grg  = $d-arm.to-date;
-say $hannukah-grg;
+say $d-grg;
 # --> '2025-04-02' also
 ```
 

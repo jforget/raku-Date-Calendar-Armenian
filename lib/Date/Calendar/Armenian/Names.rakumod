@@ -12,8 +12,8 @@ my @month-names = < nawasard-i  hoṙ-i       sahm-i
 my @month-abbr = < Naw Hor Sah Tre Kal Ara
                    Meh Are Ahe Mrr Mrg Hro Awe >;
 ;
-my @day-names = < miašabatʿi erkušabatʿi erekʿšabatʿi čʿorekʿšabatʿi hingšabatʿi urbatʿ šabatʿi >;
-my @day-abbr  = < mia        erk         ere          cor            hin         urb    sab     >;
+my @day-names = < kiraki erkušabatʿi erekʿšabatʿi čʿorekʿšabatʿi hingšabatʿi urbatʿ šabatʿi >;
+my @day-abbr  = < kir    erk         ere          cor            hin         urb    sab     >;
 
 my @day-of-month = < areg     hrand   aram    margar   ahrankʿ
                      mazdeł   astłik  mihr    jopaber  murcʿ
@@ -73,7 +73,7 @@ string values for the main module Date::Calendar::Armenian.
 =head1 SOURCES
 
 The day names and month names come from
-L<http://www.epistemeacademy.org/calendars/yearly_calendar.html?cyear=2020&vADBC=AD&CCode=Armenian&day=1
+L<http://www.epistemeacademy.org/calendars/yearly_calendar.html?cyear=2020&vADBC=AD&CCode=Armenian&day=1>
 
 Other webpages have been used to cross-check these values:
 L<https://en.wikipedia.org/wiki/Armenian_calendar>,
@@ -81,7 +81,7 @@ L<http://www.tacentral.com/astronomy.asp?story_no=3>,
 L<https://icalendrier.fr/calendriers-saga/calendriers/armenien> (in French).
 
 The abbreviations  have been chosen  by me, they  do not come  from an
-authoritavie source. Patches welcome.
+authoritaive source. Patches welcome.
 
 =head1 AUTHOR
 

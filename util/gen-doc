@@ -1,0 +1,18 @@
+#!/bin/sh
+# -*- encoding: utf-8; indent-tabs-mode: nil -*-
+#
+# Generate the POD6 documentation for the various classes
+#
+
+export DOC=$THIS_DIR/doc
+
+raku --doc=HTML lib/Date/Calendar/Armenian.rakumod       > $DOC/Armenian.html
+raku --doc=HTML lib/Date/Calendar/Armenian/Names.rakumod > $DOC/Names.html
+#raku --doc=HTML util/gener-test-0.1.0.raku               > $DOC/gener-test.html
+
+case $1 in
+   --show)
+     cd $DOC
+     firefox Armenian.html Names.html ### gener-test.html
+     ;;
+esac
