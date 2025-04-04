@@ -21,7 +21,7 @@ method BUILD(Int:D :$year, Int:D :$month, Int:D :$day, Int :$daypart = daylight(
 }
 
 method _chek-build-args(Int $year, Int $month, Int $day) {
-  if $month == 13 & $day > 5 {
+  if $month == 13 && $day > 5 {
     X::OutOfRange.new(:what<Day>, :got($day), :range<1..5 for additional days (aveliats)>).throw;
   }
 }

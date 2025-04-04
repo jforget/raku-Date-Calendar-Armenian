@@ -1,0 +1,21 @@
+#
+# Checking the checks
+#
+use v6.d;
+use Test;
+use Date::Calendar::Armenian;
+
+
+my Date::Calendar::Armenian $dt;
+
+plan 9;
+
+dies-ok(  { $dt .= new(year => 1474, month => 14, day =>  3); }, "Month out of range");
+lives-ok( { $dt .= new(year => 1474, month =>  4, day =>  3); }, "Month within range");
+dies-ok(  { $dt .= new(year => 1474, month =>  0, day =>  3); }, "Month out of range");
+dies-ok(  { $dt .= new(year => 1474, month => 10, day => 33); }, "Day out of range");
+dies-ok(  { $dt .= new(year => 1474, month => 10, day =>  0); }, "Day out of range");
+lives-ok( { $dt .= new(year => 1474, month =>  5, day => 30); }, "Day within range");
+lives-ok( { $dt .= new(year => 1474, month =>  4, day =>  1); }, "Day within range");
+lives-ok( { $dt .= new(year => 1474, month => 13, day =>  5); }, "Day within of range for aveliats");
+dies-ok(  { $dt .= new(year => 1474, month => 13, day =>  6); }, "Day out of range for aveliats");
