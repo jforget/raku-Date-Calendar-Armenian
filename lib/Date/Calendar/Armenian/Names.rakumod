@@ -10,7 +10,7 @@ my @month-names = < nawasard-i  hoṙ-i       sahm-i
 ;
 
 my @month-abbr = < Naw Hor Sah Tre Kal Ara
-                   Meh Are Ahe Mrr Mrg Hro Awe >;
+                   Meh Are Ahe Mrr Mrg Hro Awe >;
 ;
 my @day-names = < kiraki erkušabatʿi erekʿšabatʿi čʿorekʿšabatʿi hingšabatʿi urbatʿ šabatʿi >;
 my @day-abbr  = < kir    erk         ere          cor            hin         urb    sab     >;
@@ -34,19 +34,19 @@ our sub month-abbr(Int:D $month --> Str) {
 }
 
 our sub day-name(Int:D $day7 --> Str) {
-  return @day-names[$day7];
+  return @day-names[$day7 - 1];
 }
 
 our sub day-abbr(Int:D $day7 --> Str) {
-  return @day-abbr[$day7];
+  return @day-abbr[$day7 - 1];
 }
 
 our sub day-of-month(Int:D $month, Int:D $day --> Str) {
   if $month == 13 {
-    return @day-of-month[$day - 1];
+    return @day-of-awe[$day - 1];
   }
   else {
-    return @day-of-awe[$day - 1];
+    return @day-of-month[$day - 1];
   }
 }
 

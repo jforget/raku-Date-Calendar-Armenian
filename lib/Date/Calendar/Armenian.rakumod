@@ -47,6 +47,30 @@ method _build-from-args(Int $year, Int $month, Int $day, Int $daypart) {
   $!daycount    = $daycount;
 }
 
+method gist {
+  sprintf("%04d-%02d-%02d", $.year, $.month, $.day);
+}
+
+method month-name {
+  Date::Calendar::Armenian::Names::month-name($.month);
+}
+
+method month-abbr {
+  Date::Calendar::Armenian::Names::month-abbr($.month);
+}
+
+method day-name {
+  Date::Calendar::Armenian::Names::day-name($.day-of-week);
+}
+
+method day-abbr {
+  Date::Calendar::Armenian::Names::day-abbr($.day-of-week);
+}
+
+method month-day-name {
+  Date::Calendar::Armenian::Names::day-of-month($.month, $.day);
+}
+
 =begin pod
 
 =head1 NAME
