@@ -45,6 +45,25 @@ method _build-from-args(Int $year, Int $month, Int $day, Int $daypart) {
   $!day-of-year = $doy;
   $!day-of-week = $dow;
   $!daycount    = $daycount;
+
+  # computing week-related derived attributes
+  my Int $doy-wed   = $doy - $dow + 4; # day-of-year value for the nearest čʿorekʿšabatʿi / Wednesday
+  my Int $week-year = $year;
+  if $doy-wed ≤ 0 {
+    -- $week-year;
+    $doy    += 365;
+    $doy-wed = $doy - $dow + 4;
+  }
+  elsif $doy-wed > 365 {
+    ++ $week-year;
+    $doy    -= 365;
+    $doy-wed = $doy - $dow + 4;
+  }
+  my Int $week-number = ($doy-wed / 7).ceiling;
+
+  # storing week-related derived attributes
+  $!week-number = $week-number;
+  $!week-year   = $week-year;
 }
 
 method gist {

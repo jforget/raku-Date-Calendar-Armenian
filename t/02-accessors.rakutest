@@ -6,20 +6,22 @@ use Test;
 use Date::Calendar::Armenian;
 use Date::Calendar::Strftime;
 
-plan 27;
+plan 29;
 
 my Date::Calendar::Armenian $d .= new(year => 1474, month => 9, day => 17);
 
-# 1..7
+# 1..9
 is($d.month,         9);
 is($d.day,          17);
 is($d.year,       1474);
 is($d.daycount,  60768);
 is($d.day-of-year, 257);
 is($d.day-of-week,   5);
+is($d.week-number,  37);
+is($d.week-year,  1474);
 is($d.daypart,       daylight);
 
-# 8..13
+# 10..15
 is($d.gist,           '1474-09-17');
 is($d.month-name,     'ahekan-i');
 is($d.month-abbr,     'Ahe');
@@ -27,7 +29,7 @@ is($d.day-name,       'hingšabatʿi');
 is($d.day-abbr,       'hin');
 is($d.month-day-name, 'asak');
 
-# 14..19
+# 16..21
 $d .= new(year => 1474, month => 13, day => 3, daypart => daylight);
 is($d.gist,           '1474-13-03');
 is($d.month-name,     'aweleacʿ');
@@ -37,7 +39,7 @@ is($d.day-abbr,       'urb');
 is($d.month-day-name, 'hrat');
 
 
-# 20..27
+# 22..29
 $d .= new(year => 1474, month => 4, day => 26, daypart => daylight);
 is($d.daycount,  60627);
 is($d.day-of-week,   4);
