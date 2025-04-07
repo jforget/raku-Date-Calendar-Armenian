@@ -1,0 +1,50 @@
+#
+# Checking the formatting from strftime
+#
+use v6.d;
+use Test;
+use Date::Calendar::Armenian;
+use Date::Calendar::Strftime;
+
+my @tests = ((1474,  4,  26, 'zzz',       3, 'zzz')
+           , (1474,  4,  26, '%Y-%m-%d', 10, '1474-04-26')
+           , (1474,  4,  26, '%j',        3, '116')
+           , (1474,  4,  26, '%Oj',       3, '116')
+           , (1474,  4,  26, '%Ej',       3, '116')
+           , (1474,  4,  26, '%EY',       4, '1474')
+           , (1474,  4,  26, '%Ey',       3, '%Ey')
+           , (1474,  4,  26, '%A',       14, 'čʿorekʿšabatʿi')
+           , (1474,  4,  26, '%u',        1, '4')
+           , (1474,  4,  26, '%B',        3, 'trē')
+           , (1474,  4,  26, '%b',        3, 'Tre')
+           , (1474,  4,  26, '%Ed',       4, 'npat')
+             );
+plan 4 × @tests.elems;
+
+# Checking the method
+for @tests -> $test {
+  my ($y, $m, $d, $format, $length, $expected) = $test;
+  my Date::Calendar::Armenian $d-arm .= new(year => $y, month => $m, day => $d);
+  my $result = $d-arm.strftime($format);
+
+  # Remembering RT ticket 100311 for the Perl 5 module DateTime::Calendar::FrenchRevolutionary
+  # Even if the relations between UTF-8 and Raku are much simpler than between UTF-8 and Perl5
+  # better safe than sorry
+  is($result.chars, $length);
+  is($result,       $expected);
+}
+
+# Checking the function
+for @tests -> $test {
+  my ($y, $m, $d, $format, $length, $expected) = $test;
+  my Date::Calendar::Armenian $d-arm .= new(year => $y, month => $m, day => $d);
+  my $result = strftime($d-arm, $format);
+
+  # Remembering RT ticket 100311 for the Perl 5 module DateTime::Calendar::FrenchRevolutionary
+  # Even if the relations between UTF-8 and Raku are much simpler than between UTF-8 and Perl5
+  # better safe than sorry
+  is($result.chars, $length);
+  is($result,       $expected);
+}
+
+done-testing;

@@ -90,6 +90,9 @@ method month-day-name {
   Date::Calendar::Armenian::Names::day-of-month($.month, $.day);
 }
 
+method specific-format { %( Ed => { $.month-day-name }
+                          ) }
+
 =begin pod
 
 =head1 NAME
