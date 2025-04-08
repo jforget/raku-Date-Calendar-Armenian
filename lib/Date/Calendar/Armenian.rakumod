@@ -7,9 +7,9 @@ unit class Date::Calendar::Armenian:ver<0.1.0>:auth<zef:jforget>:api<1>
 
 has Int $.daycount;
 has Int $.daypart where { before-sunrise() ≤ $_ ≤ after-sunset() };
-has Int $.year  where { $_ ≥ 1 };
-has Int $.month where { 1 ≤ $_ ≤ 13 };
-has Int $.day   where { 1 ≤ $_ ≤ 30 };
+has Int $.year    where { $_ ≥ 1 };
+has Int $.month   where { 1 ≤ $_ ≤ 13 };
+has Int $.day     where { 1 ≤ $_ ≤ 30 };
 has Int $.day-of-year;
 has Int $.day-of-week;
 has Int $.week-number;
@@ -92,6 +92,26 @@ method month-day-name {
 
 method specific-format { %( Ed => { $.month-day-name }
                           ) }
+
+method new-from-date($date) {
+  $.new-from-daycount($date.daycount, daypart => $date.?daypart // daylight());
+}
+
+method new-from-daycount(Int $count is copy, Int :$daypart = daylight()) {
+  if $daypart == before-sunrise() {
+    --$count;
+  }
+  $count += 477498;
+  my Int $y = ($count / 365).Int; $count -= $y × 365;
+  my Int $m = ($count /  30).Int; $count -= $m ×  30;
+  $.new(year => $y, month => $m + 1, day => $count + 1, daypart => $daypart);
+}
+
+method to-date($class = 'Date') {
+  # See "Learning Perl 6" page 177
+  my $d = ::($class).new-from-daycount($.daycount, daypart => $.daypart);
+  return $d;
+}
 
 =begin pod
 
@@ -647,6 +667,8 @@ and Rakudo-Star.
 
 Many thanks  to Andrew,  Laurent and C<brian>  for writing  books that
 helped me learn Perl 6 / Raku.
+
+And some additional thanks to Andrew, for writing Perl module C<Date::Converter>
 
 =head1 COPYRIGHT AND LICENSE
 
