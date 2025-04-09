@@ -1,0 +1,205 @@
+#
+# Checking the conversions with newer 0.1.x modules
+#
+
+use v6.d;
+use Test;
+use lib '../version-new/lib';
+use lib 'lib';
+use Date::Calendar::Strftime:api<1>;
+use Date::Calendar::Armenian;
+use Date::Calendar::Aztec;
+use Date::Calendar::Aztec::Cortes;
+use Date::Calendar::Bahai;
+use Date::Calendar::Bahai::Astronomical;
+use Date::Calendar::Coptic;
+use Date::Calendar::Ethiopic;
+use Date::Calendar::Hebrew;
+use Date::Calendar::Hijri;
+use Date::Calendar::Gregorian;
+use Date::Calendar::FrenchRevolutionary;
+use Date::Calendar::FrenchRevolutionary::Arithmetic;
+use Date::Calendar::FrenchRevolutionary::Astronomical;
+use Date::Calendar::Julian;
+use Date::Calendar::Julian::AUC;
+use Date::Calendar::Maya;
+use Date::Calendar::Maya::Astronomical;
+use Date::Calendar::Maya::Spinden;
+use Date::Calendar::Persian;
+use Date::Calendar::Persian::Astronomical;
+
+my $ver-ar = '0.1.0';
+my @data  = (
+       (1470,  7,  4, daylight,       'ba', "Istijlál 03 Sul 0177 ☼"    , "hin 04 Meh 1470 ☼", "Gregorian: 2021-01-21")
+     , (1470,  7,  4, after-sunset,   'ba', "Istiqlál 04 Sul 0177 ☽"    , "hin 04 Meh 1470 ☽", "Gregorian: 2021-01-21")
+     , (1470,  7,  4, before-sunrise, 'ba', "Istiqlál 04 Sul 0177 ☾"    , "hin 04 Meh 1470 ☾", "Gregorian: 2021-01-22")
+     , (1473, 10, 16, daylight,       'be', "Istijlál 06 Jam 0181 ☼"    , "hin 16 Mrr 1473 ☼", "Gregorian: 2024-05-02")
+     , (1473, 10, 16, after-sunset,   'be', "Istiqlál 07 Jam 0181 ☽"    , "hin 16 Mrr 1473 ☽", "Gregorian: 2024-05-02")
+     , (1473, 10, 16, before-sunrise, 'be', "Istiqlál 07 Jam 0181 ☾"    , "hin 16 Mrr 1473 ☾", "Gregorian: 2024-05-03")
+     , (1472,  2, 27, daylight,       'co', "Psoou 06 Tho 1739 ☼"       , "urb 27 Hor 1472 ☼", "Gregorian: 2022-09-16")
+     , (1472,  2, 27, after-sunset,   'co', "Psabbaton 07 Tho 1739 ☽"   , "urb 27 Hor 1472 ☽", "Gregorian: 2022-09-16")
+     , (1472,  2, 27, before-sunrise, 'co', "Psabbaton 07 Tho 1739 ☾"   , "urb 27 Hor 1472 ☾", "Gregorian: 2022-09-17")
+     , (1471,  4,  6, daylight,       'et', "Sanyo 15 Teq 2014 ☼"       , "erk 06 Tre 1471 ☼", "Gregorian: 2021-10-25")
+     , (1471,  4,  6, after-sunset,   'et', "Maksanyo 16 Teq 2014 ☽"    , "erk 06 Tre 1471 ☽", "Gregorian: 2021-10-25")
+     , (1471,  4,  6, before-sunrise, 'et', "Maksanyo 16 Teq 2014 ☾"    , "erk 06 Tre 1471 ☾", "Gregorian: 2021-10-26")
+     , (1473,  9, 12, daylight,       'fr', "Décadi 10 Ger 0232 ☼"      , "urb 12 Ahe 1473 ☼", "Gregorian: 2024-03-29")
+     , (1473,  9, 12, after-sunset,   'fr', "Décadi 10 Ger 0232 ☽"      , "urb 12 Ahe 1473 ☽", "Gregorian: 2024-03-29")
+     , (1473,  9, 12, before-sunrise, 'fr', "Primidi 11 Ger 0232 ☾"     , "urb 12 Ahe 1473 ☾", "Gregorian: 2024-03-30")
+     , (1471,  8, 10, daylight,       'fa', "Octidi 08 Vnt 0230 ☼"      , "sab 10 Are 1471 ☼", "Gregorian: 2022-02-26")
+     , (1471,  8, 10, after-sunset,   'fa', "Octidi 08 Vnt 0230 ☽"      , "sab 10 Are 1471 ☽", "Gregorian: 2022-02-26")
+     , (1471,  8, 10, before-sunrise, 'fa', "Nonidi 09 Vnt 0230 ☾"      , "sab 10 Are 1471 ☾", "Gregorian: 2022-02-27")
+     , (1472,  6, 21, daylight,       'fe', "Octidi 18 Niv 0231 ☼"      , "kir 21 Ara 1472 ☼", "Gregorian: 2023-01-08")
+     , (1472,  6, 21, after-sunset,   'fe', "Octidi 18 Niv 0231 ☽"      , "kir 21 Ara 1472 ☽", "Gregorian: 2023-01-08")
+     , (1472,  6, 21, before-sunrise, 'fe', "Nonidi 19 Niv 0231 ☾"      , "kir 21 Ara 1472 ☾", "Gregorian: 2023-01-09")
+     , (1470, 12,  5, daylight,       'gr', "Monday 21 Jun 2021 ☼"      , "erk 05 Hro 1470 ☼", "Gregorian: 2021-06-21")
+     , (1470, 12,  5, after-sunset,   'gr', "Monday 21 Jun 2021 ☽"      , "erk 05 Hro 1470 ☽", "Gregorian: 2021-06-21")
+     , (1470, 12,  5, before-sunrise, 'gr', "Tuesday 22 Jun 2021 ☾"     , "erk 05 Hro 1470 ☾", "Gregorian: 2021-06-22")
+     , (1472, 11,  6, daylight,       'he', "Yom Shlishi 03 Siv 5783 ☼" , "ere 06 Mrg 1472 ☼", "Gregorian: 2023-05-23")
+     , (1472, 11,  6, after-sunset,   'he', "Yom Reviʻi 04 Siv 5783 ☽"  , "ere 06 Mrg 1472 ☽", "Gregorian: 2023-05-23")
+     , (1472, 11,  6, before-sunrise, 'he', "Yom Reviʻi 04 Siv 5783 ☾"  , "ere 06 Mrg 1472 ☾", "Gregorian: 2023-05-24")
+     , (1470,  3, 14, daylight,       'hi', "Yaum al-Sabt 15 Saf 1442 ☼", "sab 14 Sah 1470 ☼", "Gregorian: 2020-10-03")
+     , (1470,  3, 14, after-sunset,   'hi', "Yaum al-Ahad 16 Saf 1442 ☽", "sab 14 Sah 1470 ☽", "Gregorian: 2020-10-03")
+     , (1470,  3, 14, before-sunrise, 'hi', "Yaum al-Ahad 16 Saf 1442 ☾", "sab 14 Sah 1470 ☾", "Gregorian: 2020-10-04")
+     , (1473,  9, 29, daylight,       'jl', "Monday 02 Apr 2024 ☼"      , "erk 29 Ahe 1473 ☼", "Gregorian: 2024-04-15")
+     , (1473,  9, 29, after-sunset,   'jl', "Monday 02 Apr 2024 ☽"      , "erk 29 Ahe 1473 ☽", "Gregorian: 2024-04-15")
+     , (1473,  9, 29, before-sunrise, 'jl', "Tuesday 03 Apr 2024 ☾"     , "erk 29 Ahe 1473 ☾", "Gregorian: 2024-04-16")
+     , (1473,  8,  2, daylight,       'jc', "Sunday 05 Feb 2777 ☼"      , "kir 02 Are 1473 ☼", "Gregorian: 2024-02-18")
+     , (1473,  8,  2, after-sunset,   'jc', "Sunday 05 Feb 2777 ☽"      , "kir 02 Are 1473 ☽", "Gregorian: 2024-02-18")
+     , (1473,  8,  2, before-sunrise, 'jc', "Monday 06 Feb 2777 ☾"      , "kir 02 Are 1473 ☾", "Gregorian: 2024-02-19")
+     , (1471, 11, 27, daylight,       'pe', "Do shanbe 23 Kho 1401 ☼"   , "erk 27 Mrg 1471 ☼", "Gregorian: 2022-06-13")
+     , (1471, 11, 27, after-sunset,   'pe', "Do shanbe 23 Kho 1401 ☽"   , "erk 27 Mrg 1471 ☽", "Gregorian: 2022-06-13")
+     , (1471, 11, 27, before-sunrise, 'pe', "Se shanbe 24 Kho 1401 ☾"   , "erk 27 Mrg 1471 ☾", "Gregorian: 2022-06-14")
+     , (1470, 10,  2, daylight,       'pa', "Do shanbe 30 Far 1400 ☼"   , "erk 02 Mrr 1470 ☼", "Gregorian: 2021-04-19")
+     , (1470, 10,  2, after-sunset,   'pa', "Do shanbe 30 Far 1400 ☽"   , "erk 02 Mrr 1470 ☽", "Gregorian: 2021-04-19")
+     , (1470, 10,  2, before-sunrise, 'pa', "Se shanbe 31 Far 1400 ☾"   , "erk 02 Mrr 1470 ☾", "Gregorian: 2021-04-20")
+            );
+
+my @data-maya = (
+       (1473,  7, 11, daylight,       'm0', " 3 Pax 3 Men"               , "kir 11 Meh 1473 ☼", "Gregorian: 2024-01-28")
+     , (1473,  7, 11, after-sunset,   'm0', " 3 Pax 4 Cib"               , "kir 11 Meh 1473 ☽", "Gregorian: 2024-01-28")
+     , (1473,  7, 11, before-sunrise, 'm0', " 3 Pax 4 Cib"               , "kir 11 Meh 1473 ☾", "Gregorian: 2024-01-29")
+     , (1471,  9,  7, daylight,       'm1', "17 Cumku 3 Cauac"           , "urb 07 Ahe 1471 ☼", "Gregorian: 2022-03-25")
+     , (1471,  9,  7, after-sunset,   'm1', "17 Cumku 4 Ahau"            , "urb 07 Ahe 1471 ☽", "Gregorian: 2022-03-25")
+     , (1471,  9,  7, before-sunrise, 'm1', "17 Cumku 4 Ahau"            , "urb 07 Ahe 1471 ☾", "Gregorian: 2022-03-26")
+     , (1473,  1, 20, daylight,       'm2', "11 Yaskin 13 Akbal"         , "hin 20 Naw 1473 ☼", "Gregorian: 2023-08-10")
+     , (1473,  1, 20, after-sunset,   'm2', "11 Yaskin 1 Kan"            , "hin 20 Naw 1473 ☽", "Gregorian: 2023-08-10")
+     , (1473,  1, 20, before-sunrise, 'm2', "11 Yaskin 1 Kan"            , "hin 20 Naw 1473 ☾", "Gregorian: 2023-08-11")
+     , (1473, 10,  3, daylight,       'a0', "19 Tlaxochimaco 7 Ollin"    , "urb 03 Mrr 1473 ☼", "Gregorian: 2024-04-19")
+     , (1473, 10,  3, after-sunset,   'a0', "19 Tlaxochimaco 8 Tecpatl"  , "urb 03 Mrr 1473 ☽", "Gregorian: 2024-04-19")
+     , (1473, 10,  3, before-sunrise, 'a0', "19 Tlaxochimaco 8 Tecpatl"  , "urb 03 Mrr 1473 ☾", "Gregorian: 2024-04-20")
+     , (1472,  6, 10, daylight,       'a1', " 9 Huei Tozoztli 13 Ehecatl", "cor 10 Ara 1472 ☼", "Gregorian: 2022-12-28")
+     , (1472,  6, 10, after-sunset,   'a1', " 9 Huei Tozoztli 1 Calli"   , "cor 10 Ara 1472 ☽", "Gregorian: 2022-12-28")
+     , (1472,  6, 10, before-sunrise, 'a1', " 9 Huei Tozoztli 1 Calli"   , "cor 10 Ara 1472 ☾", "Gregorian: 2022-12-29")
+            );
+
+my %class =   a0 => 'Date::Calendar::Aztec'
+            , a1 => 'Date::Calendar::Aztec::Cortes'
+            , ar => 'Date::Calendar::Armenian'
+            , ba => 'Date::Calendar::Bahai'
+            , be => 'Date::Calendar::Bahai::Astronomical'
+            , gr => 'Date::Calendar::Gregorian'
+            , co => 'Date::Calendar::Coptic'
+            , et => 'Date::Calendar::Ethiopic'
+            , fr => 'Date::Calendar::FrenchRevolutionary'
+            , fa => 'Date::Calendar::FrenchRevolutionary::Arithmetic'
+            , fe => 'Date::Calendar::FrenchRevolutionary::Astronomical'
+            , he => 'Date::Calendar::Hebrew'
+            , hi => 'Date::Calendar::Hijri'
+            , jl => 'Date::Calendar::Julian'
+            , jc => 'Date::Calendar::Julian::AUC'
+            , m0 => 'Date::Calendar::Maya'
+            , m1 => 'Date::Calendar::Maya::Astronomical'
+            , m2 => 'Date::Calendar::Maya::Spinden'
+            , pe => 'Date::Calendar::Persian'
+            , pa => 'Date::Calendar::Persian::Astronomical'
+            ;
+
+my %ver   =   a0 => '0.0.3'
+            , a1 => '0.0.3'
+            , ar => '0.1.0'
+            , ba => '0.0.2'
+            , pe => '0.0.2'
+            , be => '0.0.2'
+            , co => '0.0.3'
+            , et => '0.0.3'
+            , fr => '0.0.6'
+            , fa => '0.0.6'
+            , fe => '0.0.6'
+            , gr => '0.0.2'
+            , he => '0.0.4'
+            , hi => '0.0.2'
+            , jl => '0.0.4'
+            , jc => '0.0.4'
+            , m0 => '0.0.3'
+            , m1 => '0.0.3'
+            , m2 => '0.0.3'
+            , pe => '0.0.2'
+            , pa => '0.0.2'
+            ;
+
+plan 12 × @data.elems
+   + 12 × @data-maya.elems;
+
+for (@data) -> $datum {
+  my ($year, $month, $day, $daypart, $cal, $str2, $str3) = $datum;
+  my Date::Calendar::Armenian $d1 .= new(year => $year, month => $month, day => $day, daypart => $daypart);
+
+  # push-push
+  my $d2 = $d1.to-date(%class{$cal});
+  is($d2.strftime("%A %d %b %Y %Ep"), $str2, "testing push with $str2");
+  is(substr($d2.^ver.Str, 0, 4), '0.1.');
+  my $d3 = $d2.to-date(%class<ar>);
+  is($d3.strftime("%a %d %b %Y %Ep"), $str3, "testing push-push with $str2 and $str3");
+  is($d3.^ver, $ver-ar);
+
+  # push-pull
+  my Date::Calendar::Armenian $d4 .= new-from-date($d2);
+  is($d4.strftime("%a %d %b %Y %Ep"), $str3, "testing push-pull with $str2 and $str3");
+  is($d4.^ver, $ver-ar);
+
+  # pull-push
+  my $d5 = ::(%class{$cal}).new-from-date($d1);
+  is($d5.strftime("%A %d %b %Y %Ep"), $str2, "testing pull with $str2");
+  is(substr($d5.^ver.Str, 0, 4), '0.1.');
+  my $d6 = $d5.to-date(%class<ar>);
+  is($d6.strftime("%a %d %b %Y %Ep"), $str3, "testing pull-push with $str2 and $str3");
+  is($d6.^ver, $ver-ar);
+
+  # pull-pull
+  my Date::Calendar::Armenian $d7 .= new-from-date($d5);
+  is($d7.strftime("%a %d %b %Y %Ep"), $str3, "testing pull-pull with $str2 and $str3");
+  is($d7.^ver, $ver-ar);
+}
+
+for (@data-maya) -> $datum {
+  my ($year, $month, $day, $daypart, $cal, $str2, $str3) = $datum;
+  my Date::Calendar::Armenian $d1 .= new(year => $year, month => $month, day => $day, daypart => $daypart);
+
+  # push-push
+  my $d2 = $d1.to-date(%class{$cal});
+  is($d2.strftime("%e %B %V %A"), $str2, "testing push with $str2");
+  is(substr($d2.^ver.Str, 0, 4), '0.1.');
+  my $d3 = $d2.to-date(%class<ar>);
+  is($d3.strftime("%a %d %b %Y %Ep"), $str3, "testing push-push with $str2 and $str3");
+  is($d3.^ver, $ver-ar);
+
+  # push-pull
+  my Date::Calendar::Armenian $d4 .= new-from-date($d2);
+  is($d4.strftime("%a %d %b %Y %Ep"), $str3, "testing push-pull with $str2 and $str3");
+  is($d4.^ver, $ver-ar);
+
+  # pull-push
+  my $d5 = ::(%class{$cal}).new-from-date($d1);
+  is($d5.strftime("%e %B %V %A"), $str2, "testing pull with $str2");
+  is(substr($d5.^ver.Str, 0, 4), '0.1.');
+  my $d6 = $d5.to-date(%class<ar>);
+  is($d6.strftime("%a %d %b %Y %Ep"), $str3, "testing pull-push with $str2 and $str3");
+  is($d6.^ver, $ver-ar);
+
+  # pull-pull
+  my Date::Calendar::Armenian $d7 .= new-from-date($d5);
+  is($d7.strftime("%a %d %b %Y %Ep"), $str3, "testing pull-pull with $str2 and $str3");
+  is($d7.^ver, $ver-ar);
+}
+
+done-testing;

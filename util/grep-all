@@ -29,7 +29,7 @@ grep -r --exclude=grep-all --exclude-dir='.git' --exclude-dir='.precomp' -P -i '
 echo -------------------
 echo module version and api
 echo -------------------
-grep -r --exclude=grep-all --exclude-dir='.git' --exclude-dir='.precomp' --exclude-dir='doc' -P '\b(ver|api)\b' *
+grep -r --exclude=grep-all --exclude-dir='.git' --exclude-dir='.precomp' --exclude-dir='doc' -P '\b(ver|api)\b' *|grep -v -P 'conv-(old|new)'
 
 echo -------------------
 echo copyright 202x
