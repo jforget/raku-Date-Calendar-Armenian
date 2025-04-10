@@ -6,13 +6,20 @@
 
 export DOC=$THIS_DIR/doc
 
-raku --doc=HTML lib/Date/Calendar/Armenian.rakumod       > $DOC/Armenian.html
-raku --doc=HTML lib/Date/Calendar/Armenian/Names.rakumod > $DOC/Names.html
-#raku --doc=HTML util/gener-test-0.1.0.raku               > $DOC/gener-test.html
+if [ ! -d $DOC ]
+then
+    mkdir $DOC
+fi
+
+
+raku -Ilib --doc=HTML lib/Date/Calendar/Armenian.rakumod       > $DOC/Armenian.html
+raku -Ilib --doc=HTML lib/Date/Calendar/Armenian/Names.rakumod > $DOC/Names.html
+raku -Ilib --doc=HTML util/gener-test-0.1.0.raku               > $DOC/gener-test.html
+perldoc -o html -d $DOC/mk-test-conv.html util/mk-test-conv.pl
 
 case $1 in
    --show)
      cd $DOC
-     firefox Armenian.html Names.html ### gener-test.html
+     firefox Armenian.html Names.html gener-test.html mk-test-conv.html
      ;;
 esac

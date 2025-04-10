@@ -214,12 +214,12 @@ Copy-paste from /tmp/test-data to the tests scripts.
 
 =head1 DESCRIPTION
 
-This  program  uses  the  various  C<Date::Calendar::>R<xxx>  classes,
-version 0.0.x and  API 0, to generate test data  for version 0.1.0 and
-API 1.  After the  test data  are generated,  check them  with another
-source (the calendar  functions in Emacs, some  websites, some Android
-apps). Please remember that the other sources do not care about sunset
-(and sunrise for the civil Maya and Aztec calendars) and that you will
+This program  uses the  various C<Date::Calendar::>R<xxx>  classes, to
+generate test  data for version 0.1.0  and API 1. After  the test data
+are generated, check them with  another source (the calendar functions
+in Emacs, some websites, some  Android apps). Please remember that the
+other sources do not care about sunset (and sunrise for the civil Maya
+and Aztec calendars  and for the Armenian calendar) and  that you will
 have to mentally shift the results before the comparison.
 
 And after  the data are  checked, copy-paste  the lines into  the test

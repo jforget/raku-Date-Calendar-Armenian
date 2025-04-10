@@ -159,7 +159,7 @@ say $d-grg;
 
 =end code
 
-Converting a Armenian date to Gregorian, while paying attention to sunset.
+Converting a Armenian date to Gregorian, while paying attention to sunrise.
 
 =begin code :lang<raku>
 
@@ -178,12 +178,12 @@ say $d-grg;
 # ---> 2025-04-03 instead of 2025-04-02
 
 # on the other hand:
-$d-arm .= new(year => 1474, month => 9, day => 16, daypart => after-sunset());
+$d-arm .= new(year => 1474, month => 9, day => 16, daypart => daylight());
 $d-grg  = $d-arm.to-date;
 say $d-grg;
 # --> '2025-04-02'
 
-$d-arm .= new(year => 1474, month => 9, day => 16, daypart => daylight());
+$d-arm .= new(year => 1474, month => 9, day => 16, daypart => after-sunset());
 $d-grg  = $d-arm.to-date;
 say $d-grg;
 # --> '2025-04-02' also
@@ -202,7 +202,7 @@ each, plus  5 additional days  which appear in  this class as  a short
 13th month.
 
 According to L<http://www.tacentral.com/astronomy.asp?story_no=3>,
-The switch from  a date to the  next occurs at sunrise.
+the switch from  a date to the  next occurs at sunrise.
 
 =head1 METHODS
 
@@ -224,6 +224,15 @@ hopefully, a C<daypart> method.
 
 Build  an Armenian  date from  the Modified  Julian Day  number and  the
 C<daypart> value.
+
+=begin code :lang<raku>
+
+use Date::Calendar::Armenian;
+use Date::Calendar::Strftime;
+my  Date::Calendar::Armenian $d-arm .= new(daycount => 60627
+                                         , daypart  => after-sunset);
+
+=end code
 
 =head2 Accessors
 
@@ -293,7 +302,7 @@ How many days since the beginning of the year. 1 to 365.
 =head3 month-day-name
 
 In addition to its name representing  its position within a week, each
-days  has  a  name  representing  its position  within  a  month.  The
+day  has  a  name  representing  its  position  within  a  month.  The
 C<month-day-name> method gives this second name.
 
 =head2 Other Methods
@@ -345,8 +354,8 @@ the call syntax:
 
 =begin code :lang<raku>
 
-say $df.strftime("%04d blah blah blah %-25B"); # using the method
-say strftime($df,"%04d blah blah blah %-25B"); # using the function
+say $d.strftime("%04d blah blah blah %-25B"); # using the method
+say strftime($d,"%04d blah blah blah %-25B"); # using the function
 
 =end code
 
@@ -371,7 +380,7 @@ produce a 4-digit substring, plus the substring C<" blah blah blah ">,
 plus the month name, padded on the right with enough spaces to produce
 a 25-char substring. Thus, the whole  string will be at least 42 chars
 long. By  the way, you  can drop the  "at least" mention,  because the
-longest month  name is 7-char long,  so the padding will  always occur
+longest month name  is 10-char long, so the padding  will always occur
 and will always include at least 18 spaces.
 
 A C<strftime> specifier consists of:
@@ -496,6 +505,20 @@ A literal `%' character.
 
 =head1 PROBLEMS AND KNOWN ISSUES
 
+=head2 Authoritative Sources
+
+Finding authoritative sources about the Armenian calendar in French or
+in English  is rather difficult.  One of the
+L<French-speaking  sources|https://icalendrier.fr/calendriers-saga/calendriers/armenien>
+that  I considers  authoritative  warns  its readers  that  it is  not
+authoritative enough.  Here is my  translation of the warning  (at the
+beginning of chapter "Le calendrier").
+
+Oddly  enough,  there are  few  references  relative to  the  Armenian
+calendar. In addition,  when we find them, they  often contradict each
+other. I  would believe  that nobody has  studied the  topic seriously
+enough and everyone gives a personal interpretation.
+
 =head2 Names
 
 The  name for  sunday has  changed over  the times.  At first,  it was
@@ -511,18 +534,29 @@ place.
 =head2 Sarkawag Reform
 
 The Armenian calendar had a reform proposed by Yovhannes Sarkawag in
-1084, to add a leap day every 4 years. According to the C<convertdate>
-Python library, this leap day is added after the 5 usual additional
-days. According to the webpage
-L<https://icalendrier.fr/calendriers-saga/calendriers/armenien>, the
-leap day is added between months Mehekan and Areg (months 7 and 8).
+1084, to add a leap day every 4 years.
 
-This distribution does  not try to implement the  Sarkawag reform. One
-reason  is that,  as stated  in  the previous  paragraph, the  sources
-disagree about the  way this reform is implemented.  Another reason is
-that if the "icalendrier.fr" webpage  is right, there is no convenient
-way to represent  the leap days, belonging to a  "7.5"-th month with a
-duration of a single day.
+According to the C<convertdate> Python library, this leap day is added
+after the  5 usual  additional days.  This is  similar to  the Coptic,
+Ethiopian and French Revolutionary calendars.
+
+According to the webpage
+L<https://icalendrier.fr/calendriers-saga/calendriers/armenien>,   the
+leap day  is added between months  Mehekan and Areg (months  7 and 8).
+The way it  is written, this does  not mean that the  Mehekan month is
+lengthened to 31  days (like February is lengthened to  29 days in the
+Julian and Gregorian calendars or like Heshvan and Kislev vary between
+29 and 30 days in the Hebrew calendar). This is a real additional day,
+yet unconnected to the regular 5  additional days. While the regular 5
+additional  days  can  be  grouped together  as  a  month-like  period
+numbered 13, the leap day between month 7 (Mehekan) and month 8 (Areg)
+cannot be considered as an additional month-like period numbered 14 or
+7.5 or whatever.
+
+Because the  authoritative sources  (that is, more  authoritative than
+me) disagree  and because the  representation of the leap  day between
+Mehekan and  Areg is rather  awkward, I have  decided not to  write an
+additional class C<Date::Calendar::Armenian:Sarkawag>.
 
 =head2 Beginning of the day
 
