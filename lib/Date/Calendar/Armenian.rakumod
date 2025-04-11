@@ -33,6 +33,16 @@ method _build-from-args(Int $year, Int $month, Int $day, Int $daypart) {
   $!daypart = $daypart;
 
   # computing derived attributes
+  # magic values : 365 is the number of days in each year (you already guessed it)
+  #                 30 is the number of days in each month (you also guessed it)
+  #             477499 needs more explanations. The date used in 02-accessors.rakutest
+  #                    is Gregorian 2025-04-03 (Thursday), Armenian 1474-09-17 and MJD 60768.
+  #                    so the magic value is the solution of the equation
+  #                    365 × 1474 + 30 × (9 - 1) + 17 - magic-value = 60768
+  #                  3 is the lowest possible positive value for the equation
+  #                    60768 + magic-value + 1 = 7 × k + 5
+  #           with   7 number of days per week (you guessed it)
+  #                  5 ordinal number of Thursday if Sunday = 1 and Saturday = 7
   my $doy      =  30 × ($month - 1) + $day;
   my $daycount = 365 × $year + $doy - 477499;
   my $dow      = ($daycount + 3) % 7 + 1;
@@ -101,6 +111,9 @@ method new-from-daycount(Int $count is copy, Int :$daypart = daylight()) {
   if $daypart == before-sunrise() {
     --$count;
   }
+  # magic values : 365 is the number of days in each year (you already guessed it)
+  #                 30 is the number of days in each month (you also guessed it)
+  #             477498 is whatever it takes to convert 60768 into 1474-09-17
   $count += 477498;
   my Int $y = ($count / 365).Int; $count -= $y × 365;
   my Int $m = ($count /  30).Int; $count -= $m ×  30;
@@ -381,7 +394,7 @@ plus the month name, padded on the right with enough spaces to produce
 a 25-char substring. Thus, the whole  string will be at least 42 chars
 long. By  the way, you  can drop the  "at least" mention,  because the
 longest month name  is 10-char long, so the padding  will always occur
-and will always include at least 18 spaces.
+and will always include at least 15 spaces.
 
 A C<strftime> specifier consists of:
 
@@ -401,7 +414,7 @@ with zeroes. Else, it is done wih spaces.
 result substring.
 
 =item  An optional  C<"E">  or  C<"O"> modifier.  On  some older  UNIX
-system,  these  were used  to  give  the I<extended>  or  I<localized>
+systems, these  were used  to  give  the I<extended>  or  I<localized>
 version  of  the date  attribute.  Here,  they rather  give  alternate
 variants of the date attribute.
 
@@ -453,7 +466,7 @@ for Gregorian dates.
 
 =defn %j
 
-The day of the year as a decimal number (range 001 to 385).
+The day of the year as a decimal number (range 001 to 365).
 
 =defn %m
 
@@ -478,7 +491,7 @@ deals with a date-time object, the day is split into two parts, before
 noon and  after noon. The  C<%p> specifier  reflects this by  giving a
 C<"AM"> or C<"PM"> string.
 
-The  3-part   splitting  in   the  C<Date::Calendar::>R<xxx>   may  be
+The 3-part  splitting in the C<Date::Calendar::>R<xxx>  classes may be
 considered as  an alternate  splitting of  a day.  To reflect  this in
 C<strftime>, we use an alternate version of C<%p>, therefore C<%Ep>.
 
@@ -510,7 +523,7 @@ A literal `%' character.
 Finding authoritative sources about the Armenian calendar in French or
 in English  is rather difficult.  One of the
 L<French-speaking  sources|https://icalendrier.fr/calendriers-saga/calendriers/armenien>
-that  I considers  authoritative  warns  its readers  that  it is  not
+that  I  consider authoritative  warns  its  readers  that it  is  not
 authoritative enough.  Here is my  translation of the warning  (at the
 beginning of chapter "Le calendrier").
 

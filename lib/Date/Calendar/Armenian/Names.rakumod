@@ -80,8 +80,14 @@ L<https://en.wikipedia.org/wiki/Armenian_calendar>,
 L<http://www.tacentral.com/astronomy.asp?story_no=3>,
 L<https://icalendrier.fr/calendriers-saga/calendriers/armenien> (in French).
 
+But I  do not bother about  differences caused by the  conversion from
+Armenian script to Latin script.
+
+The only  problem is  the translation of  Sunday, which  was initially
+"miašabatʿi" and later "kiraki". The module uses "kiraki".
+
 The abbreviations  have been chosen  by me, they  do not come  from an
-authoritaive source. Patches welcome.
+authoritative source. Patches welcome.
 
 =head1 AUTHOR
 
