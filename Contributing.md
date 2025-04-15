@@ -39,6 +39,7 @@ First, you need to install with `zef` the prerequisites for all
 * `Date::Calendar::Strftime` version 0.1.1 or later
 * `Date::Names`
 * `List::MoreUtils`
+* `Pod::To::HTML` (actually required to use the `gen-doc` utility)
 
 Then you must clone all `Date::Calendar::xxx` repositories in the same
 directory as `Date::Calendar::Armenian`:
